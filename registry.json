@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generated_at": "2026-03-24T15:32:43.753152+00:00",
+  "generated_at": "2026-03-24T15:49:09.366919+00:00",
   "repo_url": "",
   "domains": [
     {
@@ -18,9 +18,9 @@
         "fr"
       ],
       "notebook_count": 2,
-      "script_count": 0,
-      "snippet_count": 0,
-      "last_updated": "2026-03-24T15:32:43.753107+00:00"
+      "script_count": 1,
+      "snippet_count": 3,
+      "last_updated": "2026-03-24T15:49:09.366868+00:00"
     }
   ]
 }

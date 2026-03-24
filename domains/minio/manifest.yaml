@@ -37,4 +37,37 @@ code:
         title: "Lire CSV & Parquet depuis MinIO, agréger et sauvegarder"
         description: "Lire des fichiers CSV et Parquet directement depuis MinIO dans des DataFrames (sans téléchargement), effectuer des agrégations et sauvegarder les résultats en Parquet dans un autre bucket"
 
-snippet_files: []
+  - file: ad_user_group_policy.sh
+    title: Add AD Users/Groups and Attach Policies
+    description: Bash script to add Active Directory users and groups to MinIO and attach IAM policies using the mc CLI
+    type: script
+    code_lang: bash
+    difficulty: intermediate
+    estimated_time: 10min
+    tags: [minio, mc, active-directory, ldap, iam, policy, users, groups]
+    i18n:
+      fr:
+        title: "Ajouter des utilisateurs/groupes AD et attacher des politiques"
+        description: "Script bash pour ajouter des utilisateurs et groupes Active Directory à MinIO et attacher des politiques IAM avec la CLI mc"
+
+snippet_files:
+  - file: ad_policy_commands.json
+    title: MinIO AD Policy Commands
+    tags: [minio, mc, active-directory, ldap, policy]
+    i18n:
+      fr:
+        title: "Commandes MinIO pour politiques AD"
+
+  - file: minio_client_basics.json
+    title: MinIO Python Client Basics
+    tags: [minio, python, client, buckets, objects]
+    i18n:
+      fr:
+        title: "Bases du client Python MinIO"
+
+  - file: s3fs_dataframe_operations.json
+    title: S3FS DataFrame Operations with MinIO
+    tags: [minio, s3fs, pandas, csv, parquet, dataframe, aggregation]
+    i18n:
+      fr:
+        title: "Opérations DataFrame avec S3FS et MinIO"

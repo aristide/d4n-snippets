@@ -1,0 +1,137 @@
+{
+  "id": "ad_policy_commands",
+  "title": "Commandes MinIO pour politiques utilisateurs/groupes AD",
+  "lang": "fr",
+  "snippets": [
+    {
+      "id": "mc_alias_set",
+      "title": "Configurer un alias MinIO",
+      "description": "Créer un profil de connexion enregistré vers un serveur MinIO",
+      "code_lang": "bash",
+      "lang": "fr",
+      "tags": ["minio", "mc", "alias", "connexion"],
+      "code": "mc alias set myminio https://minio.example.com CLE_ACCES CLE_SECRETE",
+      "imports": []
+    },
+    {
+      "id": "mc_alias_set_env",
+      "title": "Configurer un alias MinIO (avec variables d'env)",
+      "description": "Créer un profil de connexion en lisant les identifiants depuis les variables d'environnement",
+      "code_lang": "bash",
+      "lang": "fr",
+      "tags": ["minio", "mc", "alias", "variables-environnement"],
+      "code": "mc alias set \"${MINIO_ALIAS:-myminio}\" \\\n  \"${MINIO_ENDPOINT}\" \\\n  \"${MINIO_ACCESS_KEY}\" \\\n  \"${MINIO_SECRET_KEY}\"",
+      "imports": []
+    },
+    {
+      "id": "mc_policy_list",
+      "title": "Lister toutes les politiques IAM",
+      "description": "Afficher toutes les politiques IAM disponibles sur le serveur MinIO",
+      "code_lang": "bash",
+      "lang": "fr",
+      "tags": ["minio", "mc", "politique", "liste"],
+      "code": "mc admin policy list myminio",
+      "imports": []
+    },
+    {
+      "id": "mc_policy_create",
+      "title": "Créer une politique IAM depuis un fichier JSON",
+      "description": "Créer une nouvelle politique IAM sur MinIO à partir d'un fichier JSON local",
+      "code_lang": "bash",
+      "lang": "fr",
+      "tags": ["minio", "mc", "politique", "créer", "iam"],
+      "code": "mc admin policy create myminio mon-nom-de-politique /chemin/vers/politique.json",
+      "imports": []
+    },
+    {
+      "id": "mc_policy_create_inline",
+      "title": "Créer une politique IAM (JSON en ligne)",
+      "description": "Créer une politique en lecture seule pour un bucket spécifique avec un heredoc en ligne",
+      "code_lang": "bash",
+      "lang": "fr",
+      "tags": ["minio", "mc", "politique", "créer", "iam", "en-ligne"],
+      "code": "cat > /tmp/politique.json <<'EOF'\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Effect\": \"Allow\",\n      \"Action\": [\"s3:GetObject\", \"s3:ListBucket\"],\n      \"Resource\": [\n        \"arn:aws:s3:::mon-bucket\",\n        \"arn:aws:s3:::mon-bucket/*\"\n      ]\n    }\n  ]\n}\nEOF\nmc admin policy create myminio mon-nom-de-politique /tmp/politique.json",
+      "imports": []
+    },
+    {
+      "id": "mc_policy_attach_user",
+      "title": "Attacher une politique à un utilisateur AD",
+      "description": "Accorder une politique IAM à un utilisateur Active Directory via son DN LDAP",
+      "code_lang": "bash",
+      "lang": "fr",
+      "tags": ["minio", "mc", "politique", "attacher", "utilisateur", "ldap", "active-directory"],
+      "code": "mc admin policy attach myminio mon-nom-de-politique \\\n  --user \"uid=jdoe,dc=example,dc=com\"",
+      "imports": []
+    },
+    {
+      "id": "mc_policy_attach_group",
+      "title": "Attacher une politique à un groupe AD",
+      "description": "Accorder une politique IAM à tous les membres d'un groupe Active Directory",
+      "code_lang": "bash",
+      "lang": "fr",
+      "tags": ["minio", "mc", "politique", "attacher", "groupe", "ldap", "active-directory"],
+      "code": "mc admin policy attach myminio readwrite \\\n  --group \"cn=data-analysts,ou=groups,dc=example,dc=com\"",
+      "imports": []
+    },
+    {
+      "id": "mc_policy_detach_user",
+      "title": "Détacher une politique d'un utilisateur AD",
+      "description": "Révoquer une politique IAM d'un utilisateur Active Directory spécifique",
+      "code_lang": "bash",
+      "lang": "fr",
+      "tags": ["minio", "mc", "politique", "détacher", "utilisateur", "révoquer"],
+      "code": "mc admin policy detach myminio mon-nom-de-politique \\\n  --user \"uid=jdoe,dc=example,dc=com\"",
+      "imports": []
+    },
+    {
+      "id": "mc_policy_detach_group",
+      "title": "Détacher une politique d'un groupe AD",
+      "description": "Révoquer une politique IAM d'un groupe Active Directory",
+      "code_lang": "bash",
+      "lang": "fr",
+      "tags": ["minio", "mc", "politique", "détacher", "groupe", "révoquer"],
+      "code": "mc admin policy detach myminio readwrite \\\n  --group \"cn=data-analysts,ou=groups,dc=example,dc=com\"",
+      "imports": []
+    },
+    {
+      "id": "mc_policy_entities_user",
+      "title": "Afficher les politiques d'un utilisateur AD",
+      "description": "Lister toutes les politiques IAM actuellement attachées à un utilisateur AD",
+      "code_lang": "bash",
+      "lang": "fr",
+      "tags": ["minio", "mc", "politique", "vérifier", "utilisateur"],
+      "code": "mc admin policy entities myminio \\\n  --user \"uid=jdoe,dc=example,dc=com\"",
+      "imports": []
+    },
+    {
+      "id": "mc_policy_entities_group",
+      "title": "Afficher les politiques d'un groupe AD",
+      "description": "Lister toutes les politiques IAM actuellement attachées à un groupe AD",
+      "code_lang": "bash",
+      "lang": "fr",
+      "tags": ["minio", "mc", "politique", "vérifier", "groupe"],
+      "code": "mc admin policy entities myminio \\\n  --group \"cn=data-analysts,ou=groups,dc=example,dc=com\"",
+      "imports": []
+    },
+    {
+      "id": "mc_ldap_lookup_user",
+      "title": "Rechercher un utilisateur AD via LDAP",
+      "description": "Interroger l'annuaire LDAP pour vérifier qu'un utilisateur existe et voir ses politiques",
+      "code_lang": "bash",
+      "lang": "fr",
+      "tags": ["minio", "mc", "ldap", "utilisateur", "recherche"],
+      "code": "mc idp ldap policy entities myminio \\\n  --user \"uid=jdoe,dc=example,dc=com\"",
+      "imports": []
+    },
+    {
+      "id": "mc_ldap_lookup_group",
+      "title": "Rechercher un groupe AD via LDAP",
+      "description": "Interroger l'annuaire LDAP pour vérifier qu'un groupe existe et voir ses politiques",
+      "code_lang": "bash",
+      "lang": "fr",
+      "tags": ["minio", "mc", "ldap", "groupe", "recherche"],
+      "code": "mc idp ldap policy entities myminio \\\n  --group \"cn=data-analysts,ou=groups,dc=example,dc=com\"",
+      "imports": []
+    }
+  ]
+}

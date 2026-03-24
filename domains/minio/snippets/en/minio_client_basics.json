@@ -1,0 +1,67 @@
+{
+  "id": "minio_client_basics",
+  "title": "MinIO Python Client Basics",
+  "lang": "en",
+  "snippets": [
+    {
+      "id": "minio_import",
+      "title": "Import MinIO client",
+      "description": "Import the Minio class from the minio package",
+      "code_lang": "python",
+      "lang": "en",
+      "tags": ["minio", "import"],
+      "code": "from minio import Minio",
+      "imports": []
+    },
+    {
+      "id": "minio_env_vars",
+      "title": "Read MinIO credentials from environment variables",
+      "description": "Read endpoint, access key, secret key and secure flag from environment variables",
+      "code_lang": "python",
+      "lang": "en",
+      "tags": ["minio", "environment-variables", "credentials"],
+      "code": "import os\n\nendpoint   = os.environ[\"MINIO_ENDPOINT\"]\naccess_key = os.environ[\"MINIO_ACCESS_KEY\"]\nsecret_key = os.environ[\"MINIO_SECRET_KEY\"]\nsecure     = os.environ.get(\"MINIO_SECURE\", \"false\").lower() == \"true\"",
+      "imports": ["import os"]
+    },
+    {
+      "id": "minio_create_client",
+      "title": "Create a MinIO client",
+      "description": "Create a Minio client using endpoint and credentials from environment variables",
+      "code_lang": "python",
+      "lang": "en",
+      "tags": ["minio", "client", "connection"],
+      "code": "client = Minio(\n    os.environ[\"MINIO_ENDPOINT\"],\n    access_key=os.environ[\"MINIO_ACCESS_KEY\"],\n    secret_key=os.environ[\"MINIO_SECRET_KEY\"],\n    secure=os.environ.get(\"MINIO_SECURE\", \"false\").lower() == \"true\",\n)",
+      "imports": ["import os", "from minio import Minio"]
+    },
+    {
+      "id": "minio_list_buckets",
+      "title": "List all buckets",
+      "description": "Retrieve and print all buckets on the MinIO server",
+      "code_lang": "python",
+      "lang": "en",
+      "tags": ["minio", "buckets", "list"],
+      "code": "buckets = client.list_buckets()\nfor bucket in buckets:\n    print(f\"{bucket.name}  (created: {bucket.creation_date})\")",
+      "imports": ["from minio import Minio"]
+    },
+    {
+      "id": "minio_list_objects",
+      "title": "List all objects in a bucket",
+      "description": "List all files in a bucket recursively with name and size",
+      "code_lang": "python",
+      "lang": "en",
+      "tags": ["minio", "objects", "list", "files"],
+      "code": "objects = client.list_objects(\"my-bucket\", recursive=True)\nfor obj in objects:\n    size_kb = (obj.size or 0) / 1024\n    print(f\"{obj.object_name:<50} {size_kb:>10.1f} KB\")",
+      "imports": ["from minio import Minio"]
+    },
+    {
+      "id": "minio_list_all_buckets_files",
+      "title": "List all buckets and their files",
+      "description": "Loop through every bucket and list all objects inside each one",
+      "code_lang": "python",
+      "lang": "en",
+      "tags": ["minio", "buckets", "objects", "list"],
+      "code": "for bucket in client.list_buckets():\n    print(f\"\\nBucket: {bucket.name}\")\n    for obj in client.list_objects(bucket.name, recursive=True):\n        size_kb = (obj.size or 0) / 1024\n        print(f\"  {obj.object_name:<50} {size_kb:>10.1f} KB\")",
+      "imports": ["from minio import Minio"]
+    }
+  ]
+}

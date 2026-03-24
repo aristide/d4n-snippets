@@ -1,0 +1,137 @@
+{
+  "id": "ad_policy_commands",
+  "title": "MinIO AD User/Group Policy Commands",
+  "lang": "en",
+  "snippets": [
+    {
+      "id": "mc_alias_set",
+      "title": "Set up a MinIO alias",
+      "description": "Create a saved connection profile to a MinIO server",
+      "code_lang": "bash",
+      "lang": "en",
+      "tags": ["minio", "mc", "alias", "connection"],
+      "code": "mc alias set myminio https://minio.example.com ACCESS_KEY SECRET_KEY",
+      "imports": []
+    },
+    {
+      "id": "mc_alias_set_env",
+      "title": "Set up a MinIO alias (using env vars)",
+      "description": "Create a connection profile reading credentials from environment variables",
+      "code_lang": "bash",
+      "lang": "en",
+      "tags": ["minio", "mc", "alias", "environment-variables"],
+      "code": "mc alias set \"${MINIO_ALIAS:-myminio}\" \\\n  \"${MINIO_ENDPOINT}\" \\\n  \"${MINIO_ACCESS_KEY}\" \\\n  \"${MINIO_SECRET_KEY}\"",
+      "imports": []
+    },
+    {
+      "id": "mc_policy_list",
+      "title": "List all IAM policies",
+      "description": "Show all available IAM policies on the MinIO server",
+      "code_lang": "bash",
+      "lang": "en",
+      "tags": ["minio", "mc", "policy", "list"],
+      "code": "mc admin policy list myminio",
+      "imports": []
+    },
+    {
+      "id": "mc_policy_create",
+      "title": "Create a custom IAM policy from JSON",
+      "description": "Create a new IAM policy on MinIO from a local JSON file",
+      "code_lang": "bash",
+      "lang": "en",
+      "tags": ["minio", "mc", "policy", "create", "iam"],
+      "code": "mc admin policy create myminio my-policy-name /path/to/policy.json",
+      "imports": []
+    },
+    {
+      "id": "mc_policy_create_inline",
+      "title": "Create a custom IAM policy (inline JSON)",
+      "description": "Create a read-only policy for a specific bucket using an inline heredoc",
+      "code_lang": "bash",
+      "lang": "en",
+      "tags": ["minio", "mc", "policy", "create", "iam", "inline"],
+      "code": "cat > /tmp/policy.json <<'EOF'\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Effect\": \"Allow\",\n      \"Action\": [\"s3:GetObject\", \"s3:ListBucket\"],\n      \"Resource\": [\n        \"arn:aws:s3:::my-bucket\",\n        \"arn:aws:s3:::my-bucket/*\"\n      ]\n    }\n  ]\n}\nEOF\nmc admin policy create myminio my-policy-name /tmp/policy.json",
+      "imports": []
+    },
+    {
+      "id": "mc_policy_attach_user",
+      "title": "Attach a policy to an AD user",
+      "description": "Grant an IAM policy to a single Active Directory user by their LDAP DN",
+      "code_lang": "bash",
+      "lang": "en",
+      "tags": ["minio", "mc", "policy", "attach", "user", "ldap", "active-directory"],
+      "code": "mc admin policy attach myminio my-policy-name \\\n  --user \"uid=jdoe,dc=example,dc=com\"",
+      "imports": []
+    },
+    {
+      "id": "mc_policy_attach_group",
+      "title": "Attach a policy to an AD group",
+      "description": "Grant an IAM policy to all members of an Active Directory group",
+      "code_lang": "bash",
+      "lang": "en",
+      "tags": ["minio", "mc", "policy", "attach", "group", "ldap", "active-directory"],
+      "code": "mc admin policy attach myminio readwrite \\\n  --group \"cn=data-analysts,ou=groups,dc=example,dc=com\"",
+      "imports": []
+    },
+    {
+      "id": "mc_policy_detach_user",
+      "title": "Detach a policy from an AD user",
+      "description": "Revoke an IAM policy from a specific Active Directory user",
+      "code_lang": "bash",
+      "lang": "en",
+      "tags": ["minio", "mc", "policy", "detach", "user", "revoke"],
+      "code": "mc admin policy detach myminio my-policy-name \\\n  --user \"uid=jdoe,dc=example,dc=com\"",
+      "imports": []
+    },
+    {
+      "id": "mc_policy_detach_group",
+      "title": "Detach a policy from an AD group",
+      "description": "Revoke an IAM policy from an Active Directory group",
+      "code_lang": "bash",
+      "lang": "en",
+      "tags": ["minio", "mc", "policy", "detach", "group", "revoke"],
+      "code": "mc admin policy detach myminio readwrite \\\n  --group \"cn=data-analysts,ou=groups,dc=example,dc=com\"",
+      "imports": []
+    },
+    {
+      "id": "mc_policy_entities_user",
+      "title": "Show policies attached to an AD user",
+      "description": "List all IAM policies currently attached to a specific AD user",
+      "code_lang": "bash",
+      "lang": "en",
+      "tags": ["minio", "mc", "policy", "verify", "user"],
+      "code": "mc admin policy entities myminio \\\n  --user \"uid=jdoe,dc=example,dc=com\"",
+      "imports": []
+    },
+    {
+      "id": "mc_policy_entities_group",
+      "title": "Show policies attached to an AD group",
+      "description": "List all IAM policies currently attached to a specific AD group",
+      "code_lang": "bash",
+      "lang": "en",
+      "tags": ["minio", "mc", "policy", "verify", "group"],
+      "code": "mc admin policy entities myminio \\\n  --group \"cn=data-analysts,ou=groups,dc=example,dc=com\"",
+      "imports": []
+    },
+    {
+      "id": "mc_ldap_lookup_user",
+      "title": "Look up an AD user via LDAP",
+      "description": "Query the LDAP directory to verify a user exists and see their policy mappings",
+      "code_lang": "bash",
+      "lang": "en",
+      "tags": ["minio", "mc", "ldap", "user", "lookup"],
+      "code": "mc idp ldap policy entities myminio \\\n  --user \"uid=jdoe,dc=example,dc=com\"",
+      "imports": []
+    },
+    {
+      "id": "mc_ldap_lookup_group",
+      "title": "Look up an AD group via LDAP",
+      "description": "Query the LDAP directory to verify a group exists and see its policy mappings",
+      "code_lang": "bash",
+      "lang": "en",
+      "tags": ["minio", "mc", "ldap", "group", "lookup"],
+      "code": "mc idp ldap policy entities myminio \\\n  --group \"cn=data-analysts,ou=groups,dc=example,dc=com\"",
+      "imports": []
+    }
+  ]
+}

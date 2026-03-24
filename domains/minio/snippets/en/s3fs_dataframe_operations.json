@@ -1,0 +1,77 @@
+{
+  "id": "s3fs_dataframe_operations",
+  "title": "S3FS DataFrame Operations with MinIO",
+  "lang": "en",
+  "snippets": [
+    {
+      "id": "s3fs_create_filesystem",
+      "title": "Create an S3 filesystem connection to MinIO",
+      "description": "Set up s3fs.S3FileSystem using environment variables to connect to MinIO",
+      "code_lang": "python",
+      "lang": "en",
+      "tags": ["minio", "s3fs", "connection"],
+      "code": "import os\nimport s3fs\n\nendpoint = os.environ[\"MINIO_ENDPOINT\"]\nsecure = os.environ.get(\"MINIO_SECURE\", \"false\").lower() == \"true\"\nprotocol = \"https\" if secure else \"http\"\n\nfs = s3fs.S3FileSystem(\n    key=os.environ[\"MINIO_ACCESS_KEY\"],\n    secret=os.environ[\"MINIO_SECRET_KEY\"],\n    endpoint_url=f\"{protocol}://{endpoint}\",\n    use_ssl=secure,\n)",
+      "imports": ["import os", "import s3fs"]
+    },
+    {
+      "id": "s3fs_read_csv",
+      "title": "Read a CSV from MinIO into a DataFrame",
+      "description": "Stream a CSV file from a MinIO bucket directly into a pandas DataFrame without downloading",
+      "code_lang": "python",
+      "lang": "en",
+      "tags": ["minio", "s3fs", "csv", "pandas", "dataframe"],
+      "code": "import pandas as pd\n\nwith fs.open(\"my-bucket/data.csv\", \"rb\") as f:\n    df = pd.read_csv(f)",
+      "imports": ["import pandas as pd", "import s3fs"]
+    },
+    {
+      "id": "s3fs_read_parquet",
+      "title": "Read a Parquet file from MinIO into a DataFrame",
+      "description": "Stream a Parquet file from a MinIO bucket directly into a pandas DataFrame without downloading",
+      "code_lang": "python",
+      "lang": "en",
+      "tags": ["minio", "s3fs", "parquet", "pandas", "dataframe"],
+      "code": "import pandas as pd\n\nwith fs.open(\"my-bucket/data.parquet\", \"rb\") as f:\n    df = pd.read_parquet(f)",
+      "imports": ["import pandas as pd", "import s3fs"]
+    },
+    {
+      "id": "s3fs_groupby_agg",
+      "title": "Aggregate a DataFrame with groupby",
+      "description": "Group rows by a column and compute sum, mean, and count in one call",
+      "code_lang": "python",
+      "lang": "en",
+      "tags": ["pandas", "groupby", "aggregation", "dataframe"],
+      "code": "agg_df = df.groupby(\"category\").agg(\n    total=(\"amount\", \"sum\"),\n    average=(\"amount\", \"mean\"),\n    count=(\"amount\", \"count\"),\n).reset_index()",
+      "imports": ["import pandas as pd"]
+    },
+    {
+      "id": "s3fs_write_parquet",
+      "title": "Save a DataFrame as Parquet to MinIO",
+      "description": "Write a pandas DataFrame directly to a MinIO bucket in Parquet format without temporary files",
+      "code_lang": "python",
+      "lang": "en",
+      "tags": ["minio", "s3fs", "parquet", "pandas", "write"],
+      "code": "with fs.open(\"results-bucket/output.parquet\", \"wb\") as f:\n    df.to_parquet(f, index=False)",
+      "imports": ["import pandas as pd", "import s3fs"]
+    },
+    {
+      "id": "s3fs_list_files",
+      "title": "List files in a MinIO bucket via s3fs",
+      "description": "List all files in a bucket with their sizes using s3fs",
+      "code_lang": "python",
+      "lang": "en",
+      "tags": ["minio", "s3fs", "list", "files"],
+      "code": "files = fs.ls(\"my-bucket\", detail=True)\nfor f in files:\n    size_kb = f[\"size\"] / 1024\n    print(f\"{f['Key']:<50} {size_kb:>8.1f} KB\")",
+      "imports": ["import s3fs"]
+    },
+    {
+      "id": "s3fs_full_pipeline",
+      "title": "Full pipeline: read CSV, aggregate, save Parquet",
+      "description": "Complete example reading a CSV from MinIO, aggregating with groupby, and saving results as Parquet to another bucket",
+      "code_lang": "python",
+      "lang": "en",
+      "tags": ["minio", "s3fs", "csv", "parquet", "pandas", "pipeline"],
+      "code": "import os\nimport pandas as pd\nimport s3fs\n\nendpoint = os.environ[\"MINIO_ENDPOINT\"]\nsecure = os.environ.get(\"MINIO_SECURE\", \"false\").lower() == \"true\"\n\nfs = s3fs.S3FileSystem(\n    key=os.environ[\"MINIO_ACCESS_KEY\"],\n    secret=os.environ[\"MINIO_SECRET_KEY\"],\n    endpoint_url=f\"{'https' if secure else 'http'}://{endpoint}\",\n    use_ssl=secure,\n)\n\n# Read\nwith fs.open(\"raw-data/sales.csv\", \"rb\") as f:\n    df = pd.read_csv(f)\n\n# Aggregate\nresult = df.groupby(\"category\").agg(\n    total=(\"amount\", \"sum\"),\n    average=(\"amount\", \"mean\"),\n).reset_index()\n\n# Save\nwith fs.open(\"results/agg_sales.parquet\", \"wb\") as f:\n    result.to_parquet(f, index=False)",
+      "imports": ["import os", "import pandas as pd", "import s3fs"]
+    }
+  ]
+}
