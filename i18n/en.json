@@ -1,0 +1,23 @@
+{
+  "sidebar.title": "Examples & snippets",
+  "tab.code": "Code examples",
+  "tab.snippets": "Snippets",
+  "search.code.placeholder": "Search code examples...",
+  "search.snippets.placeholder": "Search snippets...",
+  "status.lastSync": "Last synced {time} ago",
+  "status.refresh": "Refresh",
+  "action.copyToWorkspace": "Copy to workspace",
+  "action.openInEditor": "Open in editor",
+  "action.insertSnippet": "Insert snippet",
+  "action.copyToClipboard": "Copy to clipboard",
+  "difficulty.beginner": "beginner",
+  "difficulty.intermediate": "intermediate",
+  "difficulty.advanced": "advanced",
+  "locale.fallbackNotice": "Translation unavailable — English version",
+  "locale.translated": "Translated",
+  "kernel.detected": "Kernel {name} detected",
+  "kernel.none": "No notebook active",
+  "filter.shown": "{n} shown",
+  "filter.hidden": "{n} hidden ({lang})",
+  "filter.noFilter": "no filter"
+}

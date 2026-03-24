@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "skills": {
+    "r-expert": {
+      "source": "personamanagmentlayer/pcl",
+      "sourceType": "github",
+      "computedHash": "e280e77a4fdf78028493d4236ee3e5d8daf532696e52f59f2c28eb4f5459efbf"
+    },
+    "stata": {
+      "source": "dylantmoore/stata-skill",
+      "sourceType": "github",
+      "computedHash": "45ba34b65aca0699552b8ed8c7327de6106fde6faa26f948ae95994b1c02dc8d"
+    }
+  }
+}
